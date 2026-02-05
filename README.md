@@ -18,6 +18,11 @@ This project focuses on backend engineering practices, clean architecture, and p
 	•	Documented the API using Swagger (Flasgger)
 	•	Deployed and validated the API in a production environment
 	•	Managed source code using Git and GitHub
+	•	Added multi-engine job sourcing with country-based engine selection
+	•	Integrated Adzuna API for UK-specific job listings
+	•	Improved UK job accuracy with city-level filtering
+	•	Implemented engine abstraction to support future job data sources
+	•	Ensured consistent response schema across different job providers
 
 ## How It Was Built
 	•	Flask used as the core web framework
@@ -33,6 +38,11 @@ This project focuses on backend engineering practices, clean architecture, and p
 	•	Endpoints tested using Postman and Swagger UI
 	•	Environment variables used for configuration
 	•	Gunicorn used for production execution
+	•	Implemented an engine-based architecture to support multiple job providers
+	•	Used Adzuna API for UK job searches and RapidAPI (JSearch) for US jobs
+	•	Dynamically selected job source engine based on country parameter
+	•	Normalized job data from different providers into a single response format
+	•	Added city-based filtering for improved location accuracy
 
 
 
@@ -41,6 +51,7 @@ This project focuses on backend engineering practices, clean architecture, and p
 	•	Flask
 	•	Flasgger (Swagger / OpenAPI)
 	•	RapidAPI (JSearch)
+	•	Adzuna Jobs API (UK job data)
 	•	Requests
 	•	Gunicorn
 	•	Git & GitHub
@@ -101,6 +112,12 @@ X-API-Key: your-api-key
 ]
 }
 
+## Job Data Sources
+
+US job listings are sourced using RapidAPI (JSearch).
+UK job listings are sourced using the Adzuna Jobs API.
+
+The API automatically selects the appropriate data source based on the country parameter while maintaining a consistent response structure.
 
 ## Swagger Documentation
 
@@ -134,6 +151,9 @@ python app.py
 RAPIDAPI_KEY — RapidAPI key
 RAPIDAPI_HOST — JSearch API host
 
+ADZUNA_APP_ID — Adzuna application ID (UK jobs)
+ADZUNA_APP_KEY — Adzuna API key
+
 These must never be committed to GitHub.
 
 
@@ -150,6 +170,7 @@ gunicorn app:app
 	•	Environment variables must be handled securely
 	•	Rate limiting reduces abuse
 	•	This API is not intended as an open public service
+	•	Third-party API credentials are managed using environment variables only
 
 ## License
 

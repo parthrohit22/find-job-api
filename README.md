@@ -1,225 +1,212 @@
-FIND JOBS API
-==============
+# Find Job API
 
-A production-ready Job Search API built with Flask that aggregates job listings
-from external sources, normalizes inconsistent data, and exposes a clean,
-secure API for clients.
+Find Job API is a production-ready REST API built with Flask that helps users search for jobs using real-time data from RapidAPI (JSearch).  
+The API supports authentication, rate limiting, caching, filtering, and interactive documentation via Swagger.
 
-The API uses JSearch (RapidAPI) as its data source and demonstrates real-world
-backend engineering practices such as authentication, rate limiting, caching,
-external API abstraction, and cloud deployment.
+This project was built as a backend-focused application with clean architecture, real-world constraints, and deployment readiness.
 
+---
 
-FEATURES
---------
+## Features
 
 - Job search powered by JSearch (RapidAPI)
-- Clean and normalized job data schema
-- Apply links with intelligent fallback logic
 - API key–based authentication
-- Rate limiting per client IP
-- In-memory caching with time-to-live (TTL)
-- Production deployment using Gunicorn and Render
-- Secure environment variable handling
-- Ready for Swagger / OpenAPI documentation
+- Rate limiting to prevent abuse
+- In-memory caching for faster repeated queries
+- Normalized and consistent job data
+- Apply links included for each job
+- Swagger (OpenAPI) documentation
+- Ready for production deployment
 
+---
 
-ARCHITECTURE OVERVIEW
----------------------
+## Tech Stack
 
-Client (Postman / Swagger UI / Frontend)
-        |
-        v
-Flask API (/jobs endpoint)
-        |
-        v
-Authentication → Rate Limiting → Cache
-        |
-        v
-JSearch Service (RapidAPI)
-        |
-        v
-Normalized Job Response
+- Python 3
+- Flask
+- Flasgger (Swagger UI)
+- Requests
+- RapidAPI (JSearch)
+- Gunicorn (production server)
+- Git & GitHub
 
+---
 
-DESIGN PRINCIPLE
-----------------
-Routes never communicate directly with external APIs.
-All third-party access is handled in the service layer.
+## Project Structure
 
+find-job-api/
+│
+├── app.py                  # Flask application entry point
+├── config.py               # Configuration and environment handling
+├── requirements.txt        # Python dependencies
+│
+├── routes/
+│   ├── jobs.py             # /jobs endpoint
+│   └── health.py           # health check endpoint
+│
+├── services/
+│   └── jsearch.py          # RapidAPI JSearch integration
+│
+├── utils/
+│   ├── auth.py             # API key authentication
+│   ├── cache.py            # Caching logic
+│   ├── rate_limiter.py     # Rate limiting logic
+│   └── normalizer.py       # Job data normalization
+│
+└── README.md
 
-PROJECT STRUCTURE
------------------
+---
 
-jobsearch/
-- app.py
-- config.py
-- routes/
-  - health.py
-  - jobs.py
-- services/
-  - jsearch.py
-- utils/
-  - auth.py
-  - cache.py
-  - normalizer.py
-  - rate_limiter.py
-- requirements.txt
-- README.txt
+## Authentication
 
+All requests to the API require an API key.
 
-AUTHENTICATION
---------------
+The key must be passed in the request header:
 
-All protected endpoints require an API key.
-
-Request header:
-X-API-Key: test-key-123
-
-If the API key is missing or invalid, the API returns:
-401 Unauthorized
-
-
-API ENDPOINTS
--------------
-
-Health Check
-------------
-Endpoint:
-GET /
-
-Response:
-status: API alive
-
-
-Job Search
-----------
-Endpoint:
-GET /jobs
-
-Required query parameter:
-- query: job title or keyword
-
-Optional query parameters:
-- country: country code (default: us)
-- page: page number (default: 1)
-- remote: true or false
-- type: FULLTIME or CONTRACT
-
-Required request header:
 X-API-Key: your-api-key
 
+Requests without a valid API key will return a 401 Unauthorized response.
 
-EXAMPLE REQUEST
----------------
+---
 
-GET /jobs?query=developer&remote=true
+## Rate Limiting
 
+The API enforces rate limiting per client IP to prevent abuse.  
+If the limit is exceeded, the API returns:
 
-EXAMPLE RESPONSE
-----------------
+HTTP 429 – Rate limit exceeded
 
-cached: false
-page: 1
-count: 10
-results:
-- id: XacHlAyDYl96t7ASAAAAAA==
-  title: Backend Software Developer
-  company: Aperio Global
-  location: Washington
-  remote: false
-  employment_type: Full-time
-  apply_link: https://www.ziprecruiter.com/...
-  apply_source: ZipRecruiter
-  apply_type: redirect
+---
 
+## API Endpoints
 
-APPLY LINK RESOLUTION LOGIC
----------------------------
+### GET /jobs
 
-The API selects the best available apply URL using this priority order:
+Search for jobs using keywords and optional filters.
 
-1. Direct apply link from the job source
-2. Google Jobs redirect link
-3. Employer’s official website
+Required query parameter:
+- query — job title or keyword (e.g. developer, cyber)
 
-If no valid link exists, apply_link is returned as null.
-This reflects upstream data limitations and is expected behavior.
+Optional query parameters:
+- country — ISO-2 country code (default: us)
+- page — page number for pagination (default: 1)
+- remote — true or false
+- type — employment type (FULLTIME or CONTRACT)
 
+Example request:
 
-CACHING
--------
+GET /jobs?query=developer&country=us&remote=true
 
-- In-memory caching with a 5-minute TTL
-- Cache keys include search query and filters
-- Reduces repeated calls to external APIs
-- Improves response performance
+Required header:
 
-Cached responses include:
-cached: true
+X-API-Key: your-api-key
 
+---
 
-RATE LIMITING
--------------
+## Example Response
 
-- Maximum 20 requests per minute per IP address
-- Enforced before cache and external API calls
-- Exceeded limits return:
-429 Too Many Requests
+{
+  "cached": false,
+  "page": 1,
+  "count": 10,
+  "results": [
+    {
+      "id": "XacHlAyDYl96t7ASAAAAAA==",
+      "title": "Backend Software Developer",
+      "company": "Aperio Global",
+      "location": "Washington",
+      "employment_type": "Full-time",
+      "remote": false,
+      "apply_link": "https://www.example.com/apply",
+      "apply_source": "Company Site",
+      "apply_type": "direct"
+    }
+  ]
+}
 
+---
 
-ENVIRONMENT VARIABLES
----------------------
+## Swagger Documentation
+
+Interactive API documentation is available via Swagger.
+
+Local:
+http://127.0.0.1:5000/apidocs
+
+Production:
+https://your-deployment-url/apidocs
+
+Swagger allows you to:
+- Explore endpoints
+- Provide query parameters
+- Authenticate using API keys
+- Execute requests directly from the browser
+
+---
+
+## Local Setup
+
+1. Clone the repository
+
+git clone https://github.com/parthrohit22/find-job-api.git
+cd find-job-api
+
+2. Create a virtual environment
+
+python -m venv venv
+source venv/bin/activate
+
+3. Install dependencies
+
+pip install -r requirements.txt
+
+4. Run the application
+
+python app.py
+
+The API will be available at:
+http://127.0.0.1:5000
+
+---
+
+## Environment Variables
 
 The following environment variables are required:
 
-RAPIDAPI_KEY = your RapidAPI key
-RAPIDAPI_HOST = jsearch.p.rapidapi.com
+- RAPIDAPI_KEY — your RapidAPI key
+- RAPIDAPI_HOST — JSearch API host
 
-Secrets are never committed to version control.
+These should be stored securely and never committed to GitHub.
 
+---
 
-DEPLOYMENT
-----------
+## Deployment
 
-- Hosted on Render
-- Production server uses Gunicorn
-- Automatic redeployment on push to main branch
+The API is designed to run behind Gunicorn in production and can be deployed on platforms such as Render, Railway, or similar PaaS providers.
 
-Live API URL:
-https://find-job-api.onrender.com
+Example production command:
 
+gunicorn app:app
 
-TESTING
--------
+---
 
-- Local testing using Flask development server
-- API testing using Postman
-- Production testing using live Render deployment
+## Security Notes
 
+- API keys must never be exposed publicly
+- Environment variables should be managed securely
+- Rate limiting is enforced to reduce abuse
+- This API is not intended to be used as an open, unauthenticated service
 
-DESIGN DECISIONS
-----------------
+---
 
-- Flask chosen for simplicity and explicit control
-- API key authentication preferred over JWT for lightweight access
-- In-memory caching used for MVP with Redis-ready design
-- Strict separation of concerns across routes, services, and utilities
+## License
 
+This project is for educational and portfolio purposes.
 
-FUTURE IMPROVEMENTS
--------------------
+---
 
-- Redis-based caching and rate limiting
-- Database-backed API key management
-- Salary normalization
-- Job posting timestamps
-- Company logos
-- Frontend client application
-- Advanced monitoring and analytics
+## Author
 
+Parth Rohit  
 
-LICENSE
--------
-
-This project is intended for educational and portfolio purposes.
+GitHub: https://github.com/parthrohit22

@@ -1,6 +1,6 @@
 from flasgger import swag_from
 from flask import Blueprint, request
-from services.jsearch import get_jobs
+from services.engine_factory import get_engine
 from utils.normalizer import normalize_job
 from utils.cache import get_cache, set_cache
 from utils.rate_limiter import is_rate_limited
@@ -79,7 +79,8 @@ def jobs():
     country = request.args.get("country", "us")
     page = int(request.args.get("page", 1))
 
-    raw_jobs = get_jobs(query, country, page)
+    engine = get_engine(country)
+    raw_jobs = engine.fetch_jobs(query, country, page)
     jobs = [normalize_job(job) for job in raw_jobs]
 
     response = {

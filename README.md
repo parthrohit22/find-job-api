@@ -1,4 +1,4 @@
-JOB SEARCH API
+FIND JOBS API
 ==============
 
 A production-ready Job Search API built with Flask that aggregates job listings

@@ -1,11 +1,6 @@
 import requests
 import os
 from .base import JobEngine
-app_id = os.getenv("ADZUNA_APP_ID")
-app_key = os.getenv("ADZUNA_APP_KEY")
-
-if not app_id or not app_key:
-    raise RuntimeError("Missing Adzuna API credentials")
 
 class AdzunaEngine(JobEngine):
     def fetch_jobs(self, query, country="uk", page=1):

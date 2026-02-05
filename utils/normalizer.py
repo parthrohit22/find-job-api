@@ -5,5 +5,6 @@ def normalize_job(job):
         "company": job.get("employer_name"),
         "location": job.get("job_city"),
         "employment_type": job.get("job_employment_type"),
-        "remote": job.get("job_is_remote", False)
+        "remote": job.get("job_is_remote", False),
+        "apply_link": job.get("job_apply_link")
     }

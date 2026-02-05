@@ -1,4 +1,4 @@
-JOB SEARCH API
+#JOB SEARCH API
 ==============
 
 A production-ready Job Search API built with Flask that aggregates job listings
@@ -10,7 +10,7 @@ backend engineering practices such as authentication, rate limiting, caching,
 external API abstraction, and cloud deployment.
 
 
-FEATURES
+#FEATURES
 --------
 
 - Job search powered by JSearch (RapidAPI)
@@ -24,7 +24,7 @@ FEATURES
 - Ready for Swagger / OpenAPI documentation
 
 
-ARCHITECTURE OVERVIEW
+#ARCHITECTURE OVERVIEW
 ---------------------
 
 Client (Postman / Swagger UI / Frontend)
@@ -42,13 +42,13 @@ JSearch Service (RapidAPI)
 Normalized Job Response
 
 
-DESIGN PRINCIPLE
+#DESIGN PRINCIPLE
 ----------------
 Routes never communicate directly with external APIs.
 All third-party access is handled in the service layer.
 
 
-PROJECT STRUCTURE
+#PROJECT STRUCTURE
 -----------------
 
 jobsearch/
@@ -68,7 +68,7 @@ jobsearch/
 - README.txt
 
 
-AUTHENTICATION
+#AUTHENTICATION
 --------------
 
 All protected endpoints require an API key.
@@ -80,10 +80,10 @@ If the API key is missing or invalid, the API returns:
 401 Unauthorized
 
 
-API ENDPOINTS
+#API ENDPOINTS
 -------------
 
-Health Check
+#Health Check
 ------------
 Endpoint:
 GET /
@@ -92,7 +92,7 @@ Response:
 status: API alive
 
 
-Job Search
+#Job Search
 ----------
 Endpoint:
 GET /jobs
@@ -110,7 +110,7 @@ Required request header:
 X-API-Key: your-api-key
 
 
-EXAMPLE REQUEST
+#EXAMPLE REQUEST
 ---------------
 
 GET /jobs?query=developer&remote=true
@@ -134,7 +134,7 @@ results:
   apply_type: redirect
 
 
-APPLY LINK RESOLUTION LOGIC
+#APPLY LINK RESOLUTION LOGIC
 ---------------------------
 
 The API selects the best available apply URL using this priority order:
@@ -147,7 +147,7 @@ If no valid link exists, apply_link is returned as null.
 This reflects upstream data limitations and is expected behavior.
 
 
-CACHING
+#CACHING
 -------
 
 - In-memory caching with a 5-minute TTL
@@ -159,7 +159,7 @@ Cached responses include:
 cached: true
 
 
-RATE LIMITING
+#RATE LIMITING
 -------------
 
 - Maximum 20 requests per minute per IP address
@@ -168,7 +168,7 @@ RATE LIMITING
 429 Too Many Requests
 
 
-ENVIRONMENT VARIABLES
+#ENVIRONMENT VARIABLES
 ---------------------
 
 The following environment variables are required:
@@ -179,7 +179,7 @@ RAPIDAPI_HOST = jsearch.p.rapidapi.com
 Secrets are never committed to version control.
 
 
-DEPLOYMENT
+#DEPLOYMENT
 ----------
 
 - Hosted on Render
@@ -190,7 +190,7 @@ Live API URL:
 https://find-job-api.onrender.com
 
 
-TESTING
+#TESTING
 -------
 
 - Local testing using Flask development server
@@ -198,7 +198,7 @@ TESTING
 - Production testing using live Render deployment
 
 
-DESIGN DECISIONS
+#DESIGN DECISIONS
 ----------------
 
 - Flask chosen for simplicity and explicit control
@@ -207,7 +207,7 @@ DESIGN DECISIONS
 - Strict separation of concerns across routes, services, and utilities
 
 
-FUTURE IMPROVEMENTS
+#FUTURE IMPROVEMENTS
 -------------------
 
 - Redis-based caching and rate limiting
@@ -219,7 +219,7 @@ FUTURE IMPROVEMENTS
 - Advanced monitoring and analytics
 
 
-LICENSE
+#LICENSE
 -------
 
 This project is intended for educational and portfolio purposes.

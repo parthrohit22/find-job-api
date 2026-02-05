@@ -1,13 +1,12 @@
-Find Job API
+## Find Job API
 
 Find Job API is a production-ready REST API built with Flask that helps users search for jobs using real-time data from RapidAPI (JSearch).
 The API supports authentication, rate limiting, caching, filtering, and interactive documentation via Swagger.
 
 This project focuses on backend engineering practices, clean architecture, and production readiness.
 
-⸻
 
-Project Summary
+## Project Summary
 	•	Built a production-ready Job Search REST API using Flask
 	•	Integrated real-time job listings via RapidAPI (JSearch)
 	•	Designed a modular architecture using Flask Blueprints
@@ -20,9 +19,7 @@ Project Summary
 	•	Deployed and validated the API in a production environment
 	•	Managed source code using Git and GitHub
 
-⸻
-
-How It Was Built
+## How It Was Built
 	•	Flask used as the core web framework
 	•	Project structured into:
 	•	routes (API endpoints)
@@ -37,9 +34,9 @@ How It Was Built
 	•	Environment variables used for configuration
 	•	Gunicorn used for production execution
 
-⸻
 
-Tools & Technologies Used
+
+## Tools & Technologies Used
 	•	Python 3
 	•	Flask
 	•	Flasgger (Swagger / OpenAPI)
@@ -50,17 +47,14 @@ Tools & Technologies Used
 	•	Postman
 	•	VS Code
 
-⸻
 
-Configuration & Environment
+## Configuration & Environment
 	•	API keys stored in environment variables
 	•	Configuration isolated from application logic
 	•	Debug mode disabled in production
 	•	Secrets and .env files excluded from version control
 
-⸻
-
-API Endpoint Overview
+## API Endpoint Overview
 
 GET /jobs
 
@@ -79,16 +73,14 @@ type — FULLTIME or CONTRACT
 Required request header:
 X-API-Key: your-api-key
 
-⸻
 
-Example Request (plain text)
+## Example Request (plain text)
 
 GET /jobs?query=developer&country=us&remote=true
 X-API-Key: your-api-key
 
-⸻
 
-Example Response (plain text)
+## Example Response (plain text)
 
 {
 “cached”: false,
@@ -109,9 +101,8 @@ Example Response (plain text)
 ]
 }
 
-⸻
 
-Swagger Documentation
+## Swagger Documentation
 
 Local:
 http://127.0.0.1:5000/apidocs
@@ -121,9 +112,8 @@ https://your-deployment-url/apidocs
 
 Swagger allows interactive exploration, authentication via API key, and live execution of requests.
 
-⸻
 
-Local Setup
+## Local Setup
 
 Clone repository
 git clone https://github.com/parthrohit22/find-job-api.git
@@ -139,41 +129,33 @@ pip install -r requirements.txt
 Run application
 python app.py
 
-⸻
-
-Environment Variables
+## Environment Variables
 
 RAPIDAPI_KEY — RapidAPI key
 RAPIDAPI_HOST — JSearch API host
 
 These must never be committed to GitHub.
 
-⸻
 
-Deployment
+## Deployment
 
 The API is designed to run behind Gunicorn in production.
 
 Command:
 gunicorn app:app
 
-⸻
 
-Security Notes
+# Security Notes
 	•	API keys must never be exposed publicly
 	•	Environment variables must be handled securely
 	•	Rate limiting reduces abuse
 	•	This API is not intended as an open public service
 
-⸻
-
-License
+## License
 
 This project is for educational and portfolio purposes.
 
-⸻
-
-Author
+## Author
 
 Parth Rohit
 GitHub: https://github.com/parthrohit22

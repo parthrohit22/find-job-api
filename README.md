@@ -6,6 +6,57 @@ The API supports authentication, rate limiting, caching, filtering, and interact
 This project was built as a backend-focused application with clean architecture, real-world constraints, and deployment readiness.
 
 ---
+# Project Summary
+	•	Built a production-ready Job Search REST API using Flask
+	•	Integrated real-time job listings via RapidAPI (JSearch)
+	•	Designed a clean modular architecture using Flask Blueprints
+	•	Implemented API key authentication to secure all endpoints
+	•	Added rate limiting to prevent abuse and protect external API usage
+	•	Implemented in-memory caching to reduce duplicate external requests
+	•	Normalized third-party job data into a consistent internal schema
+	•	Included direct apply links for each job listing
+	•	Documented the API using Swagger (Flasgger) with live execution support
+	•	Deployed and validated the API in a production environment
+	•	Version-controlled the project with Git and GitHub
+
+⸻
+
+How It Was Built
+	•	Used Flask as the core web framework
+	•	Structured the project using:
+	•	routes/ for API endpoints
+	•	services/ for external API integration
+	•	utils/ for authentication, caching, rate limiting, and normalization
+	•	Integrated RapidAPI (JSearch) using the requests library
+	•	Protected endpoints with custom API key validation middleware
+	•	Applied rate limiting per client IP
+	•	Cached responses based on query parameters to improve performance
+	•	Used Swagger (Flasgger) for interactive API documentation
+	•	Tested endpoints using Postman and Swagger UI
+	•	Managed environment configuration using environment variables
+	•	Deployed using Gunicorn for production readiness
+
+⸻
+
+Tools & Technologies Used
+	•	Python 3
+	•	Flask
+	•	Flasgger (Swagger / OpenAPI)
+	•	RapidAPI (JSearch)
+	•	Requests
+	•	Gunicorn
+	•	Git & GitHub
+	•	Postman
+	•	VS Code
+
+⸻
+
+Configuration & Environment
+	•	API keys stored securely using environment variables
+	•	Configuration isolated from application logic
+	•	Production server run using Gunicorn
+	•	Debug mode disabled for production
+	•	.env and secrets excluded from version control
 
 ## Features
 

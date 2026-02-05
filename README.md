@@ -1,3 +1,4 @@
+
 # Find Job API
 
 Find Job API is a production-ready REST API built with Flask that helps users search for jobs using real-time data from RapidAPI (JSearch).  
@@ -6,57 +7,64 @@ The API supports authentication, rate limiting, caching, filtering, and interact
 This project was built as a backend-focused application with clean architecture, real-world constraints, and deployment readiness.
 
 ---
-# Project Summary
-	•	Built a production-ready Job Search REST API using Flask
-	•	Integrated real-time job listings via RapidAPI (JSearch)
-	•	Designed a clean modular architecture using Flask Blueprints
-	•	Implemented API key authentication to secure all endpoints
-	•	Added rate limiting to prevent abuse and protect external API usage
-	•	Implemented in-memory caching to reduce duplicate external requests
-	•	Normalized third-party job data into a consistent internal schema
-	•	Included direct apply links for each job listing
-	•	Documented the API using Swagger (Flasgger) with live execution support
-	•	Deployed and validated the API in a production environment
-	•	Version-controlled the project with Git and GitHub
 
-⸻
+## Project Summary
 
-How It Was Built
-	•	Used Flask as the core web framework
-	•	Structured the project using:
-	•	routes/ for API endpoints
-	•	services/ for external API integration
-	•	utils/ for authentication, caching, rate limiting, and normalization
-	•	Integrated RapidAPI (JSearch) using the requests library
-	•	Protected endpoints with custom API key validation middleware
-	•	Applied rate limiting per client IP
-	•	Cached responses based on query parameters to improve performance
-	•	Used Swagger (Flasgger) for interactive API documentation
-	•	Tested endpoints using Postman and Swagger UI
-	•	Managed environment configuration using environment variables
-	•	Deployed using Gunicorn for production readiness
+- Built a production-ready Job Search REST API using Flask
+- Integrated real-time job listings via RapidAPI (JSearch)
+- Designed a clean modular architecture using Flask Blueprints
+- Implemented API key authentication to secure all endpoints
+- Added rate limiting to prevent abuse and protect external API usage
+- Implemented in-memory caching to reduce duplicate external requests
+- Normalized third-party job data into a consistent internal schema
+- Included direct apply links for each job listing
+- Documented the API using Swagger (Flasgger) with live execution support
+- Deployed and validated the API in a production environment
+- Version-controlled the project with Git and GitHub
 
-⸻
+---
 
-Tools & Technologies Used
-	•	Python 3
-	•	Flask
-	•	Flasgger (Swagger / OpenAPI)
-	•	RapidAPI (JSearch)
-	•	Requests
-	•	Gunicorn
-	•	Git & GitHub
-	•	Postman
-	•	VS Code
+## How It Was Built
 
-⸻
+- Used Flask as the core web framework
+- Structured the project using:
+  - `routes/` for API endpoints
+  - `services/` for external API integration
+  - `utils/` for authentication, caching, rate limiting, and normalization
+- Integrated RapidAPI (JSearch) using the `requests` library
+- Protected endpoints with custom API key validation middleware
+- Applied rate limiting per client IP
+- Cached responses based on query parameters to improve performance
+- Used Swagger (Flasgger) for interactive API documentation
+- Tested endpoints using Postman and Swagger UI
+- Managed environment configuration using environment variables
+- Deployed using Gunicorn for production readiness
 
-Configuration & Environment
-	•	API keys stored securely using environment variables
-	•	Configuration isolated from application logic
-	•	Production server run using Gunicorn
-	•	Debug mode disabled for production
-	•	.env and secrets excluded from version control
+---
+
+## Tools & Technologies Used
+
+- Python 3
+- Flask
+- Flasgger (Swagger / OpenAPI)
+- RapidAPI (JSearch)
+- Requests
+- Gunicorn
+- Git & GitHub
+- Postman
+- VS Code
+
+---
+
+## Configuration & Environment
+
+- API keys stored securely using environment variables
+- Configuration isolated from application logic
+- Production server run using Gunicorn
+- Debug mode disabled for production
+- `.env` and secrets excluded from version control
+
+---
 
 ## Features
 
@@ -87,22 +95,22 @@ Configuration & Environment
 
 find-job-api/
 │
-├── app.py                  # Flask application entry point
-├── config.py               # Configuration and environment handling
-├── requirements.txt        # Python dependencies
+├── app.py
+├── config.py
+├── requirements.txt
 │
 ├── routes/
-│   ├── jobs.py             # /jobs endpoint
-│   └── health.py           # health check endpoint
+│   ├── jobs.py
+│   └── health.py
 │
 ├── services/
-│   └── jsearch.py          # RapidAPI JSearch integration
+│   └── jsearch.py
 │
 ├── utils/
-│   ├── auth.py             # API key authentication
-│   ├── cache.py            # Caching logic
-│   ├── rate_limiter.py     # Rate limiting logic
-│   └── normalizer.py       # Job data normalization
+│   ├── auth.py
+│   ├── cache.py
+│   ├── rate_limiter.py
+│   └── normalizer.py
 │
 └── README.md
 
@@ -110,20 +118,19 @@ find-job-api/
 
 ## Authentication
 
-All requests to the API require an API key.
-
-The key must be passed in the request header:
+- All requests to the API require an API key
+- The key must be passed in the request header:
 
 X-API-Key: your-api-key
 
-Requests without a valid API key will return a 401 Unauthorized response.
+- Requests without a valid API key return **401 Unauthorized**
 
 ---
 
 ## Rate Limiting
 
-The API enforces rate limiting per client IP to prevent abuse.  
-If the limit is exceeded, the API returns:
+- Rate limiting is enforced per client IP
+- Exceeded limits return:
 
 HTTP 429 – Rate limit exceeded
 
@@ -135,20 +142,20 @@ HTTP 429 – Rate limit exceeded
 
 Search for jobs using keywords and optional filters.
 
-Required query parameter:
-- query — job title or keyword (e.g. developer, cyber)
+**Required query parameter**
+- `query` — job title or keyword (e.g. developer, cyber)
 
-Optional query parameters:
-- country — ISO-2 country code (default: us)
-- page — page number for pagination (default: 1)
-- remote — true or false
-- type — employment type (FULLTIME or CONTRACT)
+**Optional query parameters**
+- `country` — ISO-2 country code (default: us)
+- `page` — page number for pagination (default: 1)
+- `remote` — true or false
+- `type` — employment type (FULLTIME or CONTRACT)
 
-Example request:
+**Example request**
 
 GET /jobs?query=developer&country=us&remote=true
 
-Required header:
+**Required header**
 
 X-API-Key: your-api-key
 
@@ -156,6 +163,7 @@ X-API-Key: your-api-key
 
 ## Example Response
 
+```json
 {
   "cached": false,
   "page": 1,
@@ -175,89 +183,77 @@ X-API-Key: your-api-key
   ]
 }
 
----
 
-## Swagger Documentation
+⸻
 
-Interactive API documentation is available via Swagger.
-
-Local:
+Swagger Documentation
+	•	Local:
 http://127.0.0.1:5000/apidocs
-
-Production:
+	•	Production:
 https://your-deployment-url/apidocs
 
 Swagger allows you to:
-- Explore endpoints
-- Provide query parameters
-- Authenticate using API keys
-- Execute requests directly from the browser
+	•	Explore endpoints
+	•	Provide query parameters
+	•	Authenticate using API keys
+	•	Execute requests directly from the browser
 
----
+⸻
 
-## Local Setup
-
-1. Clone the repository
+Local Setup
+	1.	Clone the repository
 
 git clone https://github.com/parthrohit22/find-job-api.git
 cd find-job-api
 
-2. Create a virtual environment
+	2.	Create a virtual environment
 
 python -m venv venv
 source venv/bin/activate
 
-3. Install dependencies
+	3.	Install dependencies
 
 pip install -r requirements.txt
 
-4. Run the application
+	4.	Run the application
 
 python app.py
 
-The API will be available at:
-http://127.0.0.1:5000
 
----
+⸻
 
-## Environment Variables
+Environment Variables
+	•	RAPIDAPI_KEY — RapidAPI key
+	•	RAPIDAPI_HOST — JSearch API host
 
-The following environment variables are required:
+These must never be committed to GitHub.
 
-- RAPIDAPI_KEY — your RapidAPI key
-- RAPIDAPI_HOST — JSearch API host
+⸻
 
-These should be stored securely and never committed to GitHub.
-
----
-
-## Deployment
-
-The API is designed to run behind Gunicorn in production and can be deployed on platforms such as Render, Railway, or similar PaaS providers.
-
-Example production command:
+Deployment
+	•	Designed to run behind Gunicorn in production
+	•	Suitable for Render, Railway, or similar PaaS platforms
 
 gunicorn app:app
 
----
 
-## Security Notes
+⸻
 
-- API keys must never be exposed publicly
-- Environment variables should be managed securely
-- Rate limiting is enforced to reduce abuse
-- This API is not intended to be used as an open, unauthenticated service
+Security Notes
+	•	API keys must never be exposed publicly
+	•	Environment variables must be managed securely
+	•	Rate limiting reduces abuse
+	•	This API is not intended to be an open public service
 
----
+⸻
 
-## License
+License
 
 This project is for educational and portfolio purposes.
 
----
+⸻
 
-## Author
+Author
 
-Parth Rohit  
-
+Parth Rohit
 GitHub: https://github.com/parthrohit22

@@ -1,7 +1,21 @@
+You’re right to call it out. You’re mixing three different “bullet” styles and expecting GitHub to magically interpret them. It won’t. Markdown is strict.
+
+Here’s the rule you need to stop suffering:
+	•	If you want GitHub to render bullets/headings/code blocks nicely → use Markdown (README.md) and use only Markdown syntax.
+	•	If you want zero formatting pain → use plain text (README.txt) and accept it won’t “render”.
+
+You asked: “form it correctly, where it requires choose markdown otherwise plain”
+So I’m giving you two final versions. Pick ONE. Don’t mix.
+
+⸻
+
+Option A (Recommended): Correct GitHub-rendered README.md
+
+Copy-paste this whole thing into README.md:
 
 # Find Job API
 
-Find Job API is a production-ready REST API built with Flask that helps users search for jobs using real-time data from RapidAPI (JSearch).  
+Find Job API is a production-ready REST API built with Flask that helps users search for jobs using real-time data from RapidAPI (JSearch).
 The API supports authentication, rate limiting, caching, filtering, and interactive documentation via Swagger.
 
 This project was built as a backend-focused application with clean architecture, real-world constraints, and deployment readiness.
@@ -93,77 +107,70 @@ This project was built as a backend-focused application with clean architecture,
 
 ## Project Structure
 
+```text
 find-job-api/
-│
 ├── app.py
 ├── config.py
 ├── requirements.txt
-│
 ├── routes/
 │   ├── jobs.py
 │   └── health.py
-│
 ├── services/
 │   └── jsearch.py
-│
 ├── utils/
 │   ├── auth.py
 │   ├── cache.py
 │   ├── rate_limiter.py
 │   └── normalizer.py
-│
 └── README.md
 
----
 
-## Authentication
+⸻
 
-- All requests to the API require an API key
-- The key must be passed in the request header:
+Authentication
+	•	All requests to the API require an API key.
+	•	Pass the key in the request header:
 
 X-API-Key: your-api-key
 
-- Requests without a valid API key return **401 Unauthorized**
+	•	Requests without a valid API key return 401 Unauthorized.
 
----
+⸻
 
-## Rate Limiting
+Rate Limiting
+	•	Rate limiting is enforced per client IP.
+	•	Exceeded limits return 429 Too Many Requests.
 
-- Rate limiting is enforced per client IP
-- Exceeded limits return:
+⸻
 
-HTTP 429 – Rate limit exceeded
+API Endpoints
 
----
-
-## API Endpoints
-
-### GET /jobs
+GET /jobs
 
 Search for jobs using keywords and optional filters.
 
-**Required query parameter**
-- `query` — job title or keyword (e.g. developer, cyber)
+Required query parameter:
+	•	query — job title or keyword (e.g. developer, cyber)
 
-**Optional query parameters**
-- `country` — ISO-2 country code (default: us)
-- `page` — page number for pagination (default: 1)
-- `remote` — true or false
-- `type` — employment type (FULLTIME or CONTRACT)
+Optional query parameters:
+	•	country — ISO-2 country code (default: us)
+	•	page — page number (default: 1)
+	•	remote — true or false
+	•	type — FULLTIME or CONTRACT
 
-**Example request**
+Example request:
 
 GET /jobs?query=developer&country=us&remote=true
 
-**Required header**
+Required header:
 
 X-API-Key: your-api-key
 
----
 
-## Example Response
+⸻
 
-```json
+Example Response
+
 {
   "cached": false,
   "page": 1,
@@ -187,10 +194,8 @@ X-API-Key: your-api-key
 ⸻
 
 Swagger Documentation
-	•	Local:
-http://127.0.0.1:5000/apidocs
-	•	Production:
-https://your-deployment-url/apidocs
+	•	Local: http://127.0.0.1:5000/apidocs
+	•	Production: https://your-deployment-url/apidocs
 
 Swagger allows you to:
 	•	Explore endpoints
@@ -226,13 +231,13 @@ Environment Variables
 	•	RAPIDAPI_KEY — RapidAPI key
 	•	RAPIDAPI_HOST — JSearch API host
 
-These must never be committed to GitHub.
+Never commit secrets to GitHub.
 
 ⸻
 
 Deployment
-	•	Designed to run behind Gunicorn in production
-	•	Suitable for Render, Railway, or similar PaaS platforms
+
+Run in production using Gunicorn:
 
 gunicorn app:app
 

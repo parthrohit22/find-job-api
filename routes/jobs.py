@@ -1,12 +1,13 @@
-from flasgger import swag_from
 from flask import Blueprint, request
 from services.engine_factory import get_engine
 from utils.normalizer import normalize_job
-from utils.cache import get_cache, set_cache
 from utils.rate_limiter import is_rate_limited
 from utils.auth import is_valid_api_key
 
+
 jobs_bp = Blueprint("jobs", __name__)
+
+
 @jobs_bp.route("/jobs", methods=["GET"])
 def jobs():
     """
@@ -62,16 +63,17 @@ def jobs():
         description: Rate limit exceeded
     """
 
-    # AUTH
+    # API key authentication
     api_key = request.headers.get("X-API-Key")
     if not api_key or not is_valid_api_key(api_key):
         return {"error": "unauthorized"}, 401
 
-    # RATE LIMIT
+    # Rate limiting
     client_ip = request.remote_addr
     if is_rate_limited(client_ip):
         return {"error": "rate limit exceeded"}, 429
 
+    # Required query parameter
     query = request.args.get("query")
     if not query:
         return {"error": "query parameter is required"}, 400
@@ -81,13 +83,14 @@ def jobs():
 
     engine = get_engine(country)
     raw_jobs = engine.fetch_jobs(query, country, page)
+
     jobs = [normalize_job(job) for job in raw_jobs]
 
     response = {
         "cached": False,
         "page": page,
         "count": len(jobs),
-        "results": jobs
+        "results": jobs,
     }
 
     return response

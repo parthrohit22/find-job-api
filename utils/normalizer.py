@@ -1,29 +1,27 @@
-def normalize_job(job):
-    # =========================
-    # JSEARCH FORMAT
-    # =========================
+def normalize_job(job: dict) -> dict:
+
+    def detect_source(link: str | None) -> str | None:
+        if not link:
+            return None
+
+        if "linkedin.com" in link:
+            return "LinkedIn"
+        if "indeed.com" in link:
+            return "Indeed"
+        if "ziprecruiter.com" in link:
+            return "ZipRecruiter"
+        if "google.com" in link:
+            return "Google Jobs"
+
+        return "Company Site"
+
+    # RapidAPI job format
     if "job_id" in job:
         apply_link = (
             job.get("job_apply_link")
             or job.get("job_google_link")
             or job.get("employer_website")
         )
-
-        if apply_link:
-            if "linkedin.com" in apply_link:
-                source = "LinkedIn"
-            elif "indeed.com" in apply_link:
-                source = "Indeed"
-            elif "ziprecruiter.com" in apply_link:
-                source = "ZipRecruiter"
-            elif "google.com" in apply_link:
-                source = "Google Jobs"
-            else:
-                source = "Company Site"
-        else:
-            source = None
-
-        apply_type = "direct" if job.get("job_apply_link") else "redirect"
 
         return {
             "id": job.get("job_id"),
@@ -33,24 +31,12 @@ def normalize_job(job):
             "remote": job.get("job_is_remote", False),
             "employment_type": job.get("job_employment_type"),
             "apply_link": apply_link,
-            "apply_source": source,
-            "apply_type": apply_type
+            "apply_source": detect_source(apply_link),
+            "apply_type": "direct" if job.get("job_apply_link") else "redirect",
         }
 
-    # =========================
-    # ADZUNA FORMAT
-    # =========================
+    # Adzuna job format
     apply_link = job.get("redirect_url")
-
-    if apply_link:
-        if "linkedin.com" in apply_link:
-            source = "LinkedIn"
-        elif "indeed.com" in apply_link:
-            source = "Indeed"
-        else:
-            source = "Adzuna"
-    else:
-        source = None
 
     return {
         "id": job.get("id"),
@@ -60,6 +46,6 @@ def normalize_job(job):
         "remote": False,
         "employment_type": job.get("contract_time"),
         "apply_link": apply_link,
-        "apply_source": source,
-        "apply_type": "redirect"
+        "apply_source": detect_source(apply_link) if apply_link else "Adzuna",
+        "apply_type": "redirect",
     }

@@ -1,9 +1,13 @@
-import requests
 import os
+import requests
+
 from .base import JobEngine
 
+
 class AdzunaEngine(JobEngine):
-    def fetch_jobs(self, query, country="uk", page=1):
+    BASE_URL = "https://api.adzuna.com/v1/api/jobs"
+
+    def fetch_jobs(self, query: str, country: str = "uk", page: int = 1) -> list:
         country = country.lower()
         if country == "uk":
             country = "gb"
@@ -16,7 +20,7 @@ class AdzunaEngine(JobEngine):
         if not app_id or not app_key:
             raise RuntimeError("Missing Adzuna API credentials")
 
-        url = f"https://api.adzuna.com/v1/api/jobs/{country}/search/{page}"
+        url = f"{self.BASE_URL}/{country}/search/{page}"
 
         params = {
             "app_id": app_id,
@@ -26,10 +30,10 @@ class AdzunaEngine(JobEngine):
             "content-type": "application/json",
         }
 
-        response = requests.get(url, params=params)
+        response = requests.get(url, params=params, timeout=10)
 
         if response.status_code != 200:
-            print("Adzuna error:", response.status_code, response.text)
+            raise RuntimeError(f"Adzuna API error: {response.status_code} - {response.text}")
 
-        response.raise_for_status()
-        return response.json().get("results", [])
+        data = response.json()
+        return data.get("results", [])

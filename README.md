@@ -19,6 +19,24 @@ This project focuses on backend engineering practices, modular architecture, and
 - Interactive Swagger documentation
 - Modular backend architecture
 
+## System Architecture
+
+The API follows a layered backend architecture where HTTP requests flow through the API layer, into service logic, and then to external job provider engines.
+```
+Client
+   |
+   v
+Flask API (routes)
+   |
+   v
+Service Layer
+   |
+   v
+Job Engines
+   |        |
+   v        v
+JSearch   Adzuna
+```
 
 ## Architecture
 

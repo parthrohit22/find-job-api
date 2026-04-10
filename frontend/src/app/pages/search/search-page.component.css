@@ -1,0 +1,162 @@
+.search-hero {
+  overflow: hidden;
+  border-radius: 2rem;
+}
+
+.hero-title {
+  font-size: clamp(2.2rem, 4vw, 3.6rem);
+  line-height: 0.95;
+  margin-bottom: 1rem;
+}
+
+.hero-copy {
+  max-width: 45rem;
+  font-size: 1.02rem;
+}
+
+.hero-metrics {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.hero-metric {
+  padding: 1rem 1.15rem;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.hero-metric strong {
+  display: block;
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.metric-label {
+  display: block;
+  color: var(--text-soft);
+  font-size: 0.85rem;
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.search-layout {
+  display: grid;
+  grid-template-columns: minmax(290px, 360px) minmax(0, 1fr);
+  gap: 1.5rem;
+}
+
+.search-sidebar {
+  position: sticky;
+  top: 7.5rem;
+  align-self: start;
+}
+
+.panel-heading {
+  margin-bottom: 1rem;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.filter-span-2 {
+  grid-column: 1 / -1;
+}
+
+.filter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.history-stack,
+.results-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.history-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.95rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.76);
+  text-align: left;
+}
+
+.history-card small {
+  display: block;
+  color: var(--text-soft);
+}
+
+.history-card span {
+  min-width: 2rem;
+  align-self: center;
+  text-align: center;
+  font-weight: 700;
+  color: var(--brand-deep);
+}
+
+.results-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.result-card {
+  padding: 1.35rem;
+}
+
+.result-topline,
+.result-body {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.result-topline {
+  margin-bottom: 1.1rem;
+  align-items: flex-start;
+}
+
+.result-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+@media (max-width: 1199.98px) {
+  .search-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .search-sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-topline,
+  .result-body {
+    flex-direction: column;
+  }
+}

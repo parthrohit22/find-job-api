@@ -1,0 +1,143 @@
+<section class="auth-stage">
+  <div class="auth-backdrop"></div>
+  <div class="container py-4 py-lg-5">
+    <div class="row g-4 align-items-stretch">
+      <div class="col-lg-6">
+        <div class="auth-story">
+          <span class="eyebrow mb-3">
+            <i class="bi bi-stars"></i>
+            Account Workspace
+          </span>
+          <h1 class="display-font auth-title">A sharper job tracker, built around real accounts.</h1>
+          <p class="auth-copy">
+            Create an account with your email and password. The backend generates a fresh API key
+            for your session, stores the user record in SQLite, and protects credentials with
+            salted SHA-256 hashing.
+          </p>
+
+          <div class="auth-feature-grid">
+            <article class="auth-feature-card">
+              <span class="feature-icon"><i class="bi bi-database-lock"></i></span>
+              <strong>User Database</strong>
+              <p>Accounts are persisted in the backend instead of living only in the browser.</p>
+            </article>
+            <article class="auth-feature-card">
+              <span class="feature-icon"><i class="bi bi-key-fill"></i></span>
+              <strong>Generated API Key</strong>
+              <p>The app issues a session API key automatically after signup or sign-in.</p>
+            </article>
+            <article class="auth-feature-card">
+              <span class="feature-icon"><i class="bi bi-funnel-fill"></i></span>
+              <strong>Expanded Filters</strong>
+              <p>Search by location, distance, work mode, internship, and more.</p>
+            </article>
+            <article class="auth-feature-card">
+              <span class="feature-icon"><i class="bi bi-bookmark-heart"></i></span>
+              <strong>Personal Workspace</strong>
+              <p>Saved roles, notes, and search history stay tied to your signed-in session.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="surface-card surface-card-strong auth-panel p-4 p-lg-5">
+          <div class="auth-toggle">
+            <button
+              type="button"
+              class="auth-toggle-btn"
+              [class.active]="authMode() === 'register'"
+              (click)="setMode('register')"
+            >
+              Create Account
+            </button>
+            <button
+              type="button"
+              class="auth-toggle-btn"
+              [class.active]="authMode() === 'signin'"
+              (click)="setMode('signin')"
+            >
+              Sign In
+            </button>
+          </div>
+
+          <div class="mb-4">
+            <h2 class="display-font h2 mb-2">
+              <span *ngIf="authMode() === 'register'">Create your JobFlow account</span>
+              <span *ngIf="authMode() === 'signin'">Return to your search desk</span>
+            </h2>
+            <p class="muted-copy mb-0">
+              <span *ngIf="authMode() === 'register'">
+                Your API key is created automatically when the account is saved.
+              </span>
+              <span *ngIf="authMode() === 'signin'">
+                Sign in with your email and password to receive a fresh session API key.
+              </span>
+            </p>
+          </div>
+
+          <form [formGroup]="form" (ngSubmit)="submit()" class="d-grid gap-3">
+            <div *ngIf="authMode() === 'register'">
+              <label class="form-label fw-semibold" for="name">Full name</label>
+              <input
+                id="name"
+                class="form-control form-control-lg rounded-4"
+                type="text"
+                formControlName="name"
+                placeholder="Your full name"
+              >
+            </div>
+
+            <div>
+              <label class="form-label fw-semibold" for="email">Email</label>
+              <input
+                id="email"
+                class="form-control form-control-lg rounded-4"
+                type="email"
+                formControlName="email"
+                placeholder="you@example.com"
+              >
+            </div>
+
+            <div>
+              <label class="form-label fw-semibold" for="password">Password</label>
+              <input
+                id="password"
+                class="form-control form-control-lg rounded-4"
+                type="password"
+                formControlName="password"
+                placeholder="At least 8 characters"
+              >
+            </div>
+
+            <div *ngIf="authMode() === 'register'">
+              <label class="form-label fw-semibold" for="confirmPassword">Confirm password</label>
+              <input
+                id="confirmPassword"
+                class="form-control form-control-lg rounded-4"
+                type="password"
+                formControlName="confirmPassword"
+                placeholder="Re-enter your password"
+              >
+            </div>
+
+            <div class="alert alert-danger rounded-4 mb-0" *ngIf="errorMessage">
+              {{ errorMessage }}
+            </div>
+
+            <button class="btn brand-btn btn-lg rounded-pill mt-2" type="submit" [disabled]="submitting">
+              <span *ngIf="!submitting && authMode() === 'register'">Create account and enter workspace</span>
+              <span *ngIf="!submitting && authMode() === 'signin'">Sign in and continue</span>
+              <span *ngIf="submitting">Securing your session...</span>
+            </button>
+          </form>
+
+          <div class="security-strip">
+            <i class="bi bi-shield-lock"></i>
+            Passwords and API keys are stored as salted SHA-256 hashes in the backend database.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

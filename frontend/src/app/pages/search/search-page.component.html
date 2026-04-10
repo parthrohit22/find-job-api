@@ -1,0 +1,255 @@
+<section class="app-page">
+  <div class="search-hero surface-card surface-card-strong p-4 p-lg-5 mb-4">
+    <div class="row g-4 align-items-end">
+      <div class="col-lg-8">
+        <span class="eyebrow mb-3">
+          <i class="bi bi-radar"></i>
+          Search Control Center
+        </span>
+        <h1 class="display-font hero-title">Find roles by place, distance, job type, and work style.</h1>
+        <p class="hero-copy mb-0">
+          This version of JobFlow is built to feel more like a hiring desk than a generic demo:
+          sharper filters, stronger signals, and cleaner browsing across your shortlist.
+        </p>
+      </div>
+      <div class="col-lg-4">
+        <div class="hero-metrics">
+          <div class="hero-metric">
+            <span class="metric-label">Saved</span>
+            <strong>{{ savedCount() }}</strong>
+          </div>
+          <div class="hero-metric" *ngIf="response() as currentResponse">
+            <span class="metric-label">Matches</span>
+            <strong>{{ currentResponse.count }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-layout">
+    <aside class="search-sidebar">
+      <div class="surface-card p-4 search-panel">
+        <div class="panel-heading">
+          <h2 class="section-title mb-1">Search filters</h2>
+          <p class="muted-copy mb-0">Adjust the backend query and refine the result set.</p>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="search()" class="filter-grid">
+          <div class="filter-span-2">
+            <label class="form-label fw-semibold" for="query">Role or keyword</label>
+            <input
+              id="query"
+              class="form-control rounded-4"
+              type="text"
+              formControlName="query"
+              placeholder="software engineer, designer, analyst..."
+            >
+          </div>
+
+          <div>
+            <label class="form-label fw-semibold" for="country">Country</label>
+            <select id="country" class="form-select rounded-4" formControlName="country">
+              <option value="us">United States</option>
+              <option value="uk">United Kingdom</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="form-label fw-semibold" for="location">Location</label>
+            <input
+              id="location"
+              class="form-control rounded-4"
+              type="text"
+              formControlName="location"
+              placeholder="London, Austin, Seattle..."
+            >
+          </div>
+
+          <div>
+            <label class="form-label fw-semibold" for="distance">Distance (km)</label>
+            <input
+              id="distance"
+              class="form-control rounded-4"
+              type="number"
+              min="0"
+              formControlName="distance"
+              placeholder="25"
+            >
+          </div>
+
+          <div>
+            <label class="form-label fw-semibold" for="page">Page</label>
+            <input id="page" class="form-control rounded-4" type="number" min="1" formControlName="page">
+          </div>
+
+          <div>
+            <label class="form-label fw-semibold" for="workMode">Work mode</label>
+            <select id="workMode" class="form-select rounded-4" formControlName="workMode">
+              <option value="">Any</option>
+              <option value="remote">Remote</option>
+              <option value="hybrid">Hybrid</option>
+              <option value="onsite">Non-remote</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="form-label fw-semibold" for="type">Job type</label>
+            <select id="type" class="form-select rounded-4" formControlName="type">
+              <option value="">Any</option>
+              <option value="FULLTIME">Full-time</option>
+              <option value="PARTTIME">Part-time</option>
+              <option value="CONTRACT">Contract</option>
+              <option value="INTERNSHIP">Internship</option>
+            </select>
+          </div>
+
+          <div class="filter-actions filter-span-2">
+            <button class="btn brand-btn rounded-pill px-4" type="submit" [disabled]="loading">
+              <span *ngIf="!loading">Search jobs</span>
+              <span *ngIf="loading">Searching...</span>
+            </button>
+            <button class="btn outline-brand-btn rounded-pill px-4" type="button" (click)="clearFilters()">
+              Clear
+            </button>
+          </div>
+        </form>
+
+        <div class="alert alert-danger rounded-4 mt-3 mb-0" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+      </div>
+
+      <div class="surface-card p-4 mt-4">
+        <div class="panel-heading">
+          <h2 class="section-title mb-1">Quick relaunch</h2>
+          <p class="muted-copy mb-0">Re-run searches from your recent activity.</p>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 mb-4" *ngIf="suggestions().length; else noSuggestions">
+          <button
+            class="btn btn-sm outline-brand-btn rounded-pill"
+            type="button"
+            *ngFor="let query of suggestions()"
+            (click)="useSuggestion(query)"
+          >
+            {{ query }}
+          </button>
+        </div>
+
+        <ng-template #noSuggestions>
+          <p class="muted-copy mb-4">Your repeated keywords will appear here after a few searches.</p>
+        </ng-template>
+
+        <div class="history-stack">
+          <button
+            class="history-card"
+            type="button"
+            *ngFor="let entry of history()"
+            (click)="applyHistory(entry)"
+          >
+            <div>
+              <strong>{{ entry.query }}</strong>
+              <small>
+                {{ entry.country | uppercase }} • {{ entry.location || 'Any location' }} •
+                {{ entry.workMode || 'any mode' }}
+              </small>
+            </div>
+            <span>{{ entry.resultsCount }}</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <div class="results-column">
+      <div *ngIf="response() as currentResponse; else searchPrompt">
+        <div class="alert alert-warning rounded-4 border-0 shadow-sm mb-3" *ngIf="currentResponse.warning">
+          <div class="d-flex flex-column flex-lg-row justify-content-between gap-2">
+            <span>{{ currentResponse.warning }}</span>
+            <strong class="text-uppercase small">{{ currentResponse.source.replace('_', ' ') }}</strong>
+          </div>
+        </div>
+
+        <div class="results-heading mb-3">
+          <div>
+            <h2 class="display-font h3 mb-1">Results for {{ currentResponse.query }}</h2>
+            <p class="muted-copy mb-0">
+              {{ currentResponse.country | uppercase }} • {{ currentResponse.count }} matches
+            </p>
+          </div>
+        </div>
+
+        <div class="results-stack" *ngIf="currentResponse.results.length; else noResults">
+          <article class="surface-card surface-card-strong result-card" *ngFor="let job of currentResponse.results; trackBy: trackByJob">
+            <div class="result-topline">
+              <div class="result-meta">
+                <span class="job-badge mode" *ngIf="job.work_mode">
+                  <i class="bi bi-buildings"></i>
+                  {{ modeLabel(job.work_mode) }}
+                </span>
+                <span class="job-badge type" *ngIf="job.employment_type">
+                  <i class="bi bi-briefcase"></i>
+                  {{ job.employment_type }}
+                </span>
+                <span class="job-badge warning" *ngIf="job.distance_km !== null">
+                  <i class="bi bi-signpost-split"></i>
+                  {{ job.distance_km }} km
+                </span>
+              </div>
+              <button
+                class="btn rounded-pill px-3"
+                [class.brand-btn]="!isSaved(job.id)"
+                [class.outline-brand-btn]="isSaved(job.id)"
+                type="button"
+                (click)="toggleSaved(job)"
+              >
+                <span *ngIf="!isSaved(job.id)">Save</span>
+                <span *ngIf="isSaved(job.id)">Saved</span>
+              </button>
+            </div>
+
+            <div class="result-body">
+              <div>
+                <h3 class="display-font h4 mb-2">{{ job.title }}</h3>
+                <p class="fw-semibold mb-1">{{ job.company }}</p>
+                <p class="muted-copy mb-0">
+                  <i class="bi bi-geo-alt"></i>
+                  {{ job.location || 'Location not specified' }}
+                </p>
+              </div>
+
+              <div class="result-actions">
+                <a class="btn outline-brand-btn rounded-pill px-3" [routerLink]="['/roles', job.id]">
+                  View details
+                </a>
+                <a
+                  *ngIf="job.apply_link"
+                  class="btn btn-dark rounded-pill px-3"
+                  [href]="job.apply_link"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Apply
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <ng-template #noResults>
+          <div class="surface-card empty-state">
+            <h3 class="display-font h4 mb-2">No matching jobs right now</h3>
+            <p class="mb-0">Broaden the location, remove distance, or switch work mode to Any.</p>
+          </div>
+        </ng-template>
+      </div>
+
+      <ng-template #searchPrompt>
+        <div class="surface-card empty-state">
+          <h2 class="display-font h4 mb-2">Start with a fresh search</h2>
+          <p class="mb-0">Use the control panel to search by keyword, place, and work mode.</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,8 @@
+.detail-grid dt,
+.detail-grid dd {
+  margin-bottom: 1rem;
+}
+
+.detail-hero {
+  overflow: hidden;
+}

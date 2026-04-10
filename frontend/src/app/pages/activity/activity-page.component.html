@@ -1,0 +1,86 @@
+<section class="app-page">
+  <div class="page-heading">
+    <span class="eyebrow">
+      <i class="bi bi-bar-chart"></i>
+      Activity Dashboard
+    </span>
+    <h1 class="display-font display-6 mt-3 mb-2">Track what you searched and how the workspace is evolving.</h1>
+    <p class="muted-copy mb-0">
+      This page turns recent search activity into reusable routes and simple decision support.
+    </p>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="surface-card metric-card">
+        <p class="muted-copy mb-2">Searches stored</p>
+        <div class="metric-value">{{ history().length }}</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="surface-card metric-card">
+        <p class="muted-copy mb-2">Results reviewed</p>
+        <div class="metric-value">{{ totalResultsReviewed() }}</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="surface-card metric-card">
+        <p class="muted-copy mb-2">Saved pipeline</p>
+        <div class="metric-value">{{ userData.savedCount() }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="surface-card p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="section-title mb-0">Recent searches</h2>
+          <span class="muted-copy small">Latest 12 runs</span>
+        </div>
+
+        <div *ngIf="history().length; else noHistory" class="activity-list">
+          <div class="activity-row" *ngFor="let entry of history(); trackBy: trackByHistory">
+            <div>
+              <h3 class="h5 mb-1">{{ entry.query }}</h3>
+              <p class="muted-copy mb-0">
+                {{ entry.country | uppercase }} • {{ entry.location || 'Any location' }} •
+                {{ entry.workMode || 'any mode' }} • {{ entry.resultsCount }} results •
+                {{ entry.searchedAt | date:'medium' }}
+              </p>
+            </div>
+            <button class="btn outline-brand-btn rounded-pill px-3" type="button" (click)="runAgain(entry)">
+              Reopen search
+            </button>
+          </div>
+        </div>
+
+        <ng-template #noHistory>
+          <div class="empty-state px-0 pb-0">
+            <p class="mb-0">Search history will appear here after you run a few queries.</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="surface-card p-4">
+        <h2 class="section-title mb-3">Top countries</h2>
+
+        <div *ngIf="topCountries().length; else noCountryData" class="d-grid gap-3">
+          <div class="country-row" *ngFor="let country of topCountries()">
+            <div>
+              <strong>{{ country[0] | uppercase }}</strong>
+              <p class="muted-copy mb-0">Search focus</p>
+            </div>
+            <span class="country-count">{{ country[1] }}</span>
+          </div>
+        </div>
+
+        <ng-template #noCountryData>
+          <p class="muted-copy mb-0">Country breakdown will appear after your first searches.</p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</section>

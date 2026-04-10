@@ -1,0 +1,100 @@
+<section class="app-page">
+  <ng-container *ngIf="job() as currentJob; else missingJob">
+    <div class="surface-card surface-card-strong p-4 p-lg-5 detail-hero">
+      <span class="eyebrow mb-3">
+        <i class="bi bi-briefcase"></i>
+        Role Detail Route
+      </span>
+      <div class="d-flex flex-column flex-lg-row justify-content-between gap-3">
+        <div>
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <span class="job-badge mode" *ngIf="currentJob.work_mode">
+              <i class="bi bi-buildings"></i>
+              {{ currentJob.work_mode }}
+            </span>
+            <span class="job-badge type" *ngIf="currentJob.employment_type">
+              {{ currentJob.employment_type }}
+            </span>
+            <span class="job-badge warning" *ngIf="currentJob.distance_km !== null">
+              {{ currentJob.distance_km }} km
+            </span>
+          </div>
+
+          <h1 class="display-font display-6 mb-2">{{ currentJob.title }}</h1>
+          <p class="fw-semibold mb-1">{{ currentJob.company }}</p>
+          <p class="muted-copy mb-0">{{ currentJob.location || 'Location not specified' }}</p>
+        </div>
+
+        <div class="d-flex flex-column align-items-lg-end gap-2">
+          <button
+            class="btn rounded-pill px-4"
+            [class.brand-btn]="!isSaved(currentJob.id)"
+            [class.outline-brand-btn]="isSaved(currentJob.id)"
+            type="button"
+            (click)="toggleSaved(currentJob)"
+          >
+            <span *ngIf="!isSaved(currentJob.id)">Save job</span>
+            <span *ngIf="isSaved(currentJob.id)">Saved in workspace</span>
+          </button>
+          <a class="btn outline-brand-btn rounded-pill px-4" routerLink="/saved">Open shortlist</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+      <div class="col-lg-7">
+        <div class="surface-card p-4">
+          <h2 class="section-title mb-3">Application details</h2>
+          <dl class="row mb-0 detail-grid">
+            <dt class="col-sm-4 muted-copy">Apply source</dt>
+            <dd class="col-sm-8">{{ currentJob.apply_source || 'Direct listing' }}</dd>
+
+            <dt class="col-sm-4 muted-copy">Apply type</dt>
+            <dd class="col-sm-8">{{ currentJob.apply_type || 'direct' }}</dd>
+
+            <dt class="col-sm-4 muted-copy">Employment type</dt>
+            <dd class="col-sm-8">{{ currentJob.employment_type || 'Not specified' }}</dd>
+
+            <dt class="col-sm-4 muted-copy">Work mode</dt>
+            <dd class="col-sm-8">{{ currentJob.work_mode || 'Flexible' }}</dd>
+          </dl>
+
+          <div class="mt-4" *ngIf="currentJob.apply_link">
+            <a
+              class="btn brand-btn rounded-pill px-4"
+              [href]="currentJob.apply_link"
+              target="_blank"
+              rel="noopener"
+            >
+              Open application link
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="surface-card p-4">
+          <h2 class="section-title mb-3">Recruiter note</h2>
+          <textarea
+            class="form-control rounded-4"
+            rows="8"
+            placeholder="Add why this role matters, what to research, or the next follow-up step."
+            [value]="userData.getSavedJob(currentJob.id)?.note ?? ''"
+            (input)="updateNote(currentJob, noteInput.value)"
+            #noteInput
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #missingJob>
+    <div class="surface-card empty-state">
+      <h1 class="display-font h3 mb-2">Job not available in the current workspace</h1>
+      <p class="mb-3">
+        Open the role from the search page again, or save it first so its detail page stays available.
+      </p>
+      <a class="btn brand-btn rounded-pill px-4" routerLink="/search">Back to search</a>
+    </div>
+  </ng-template>
+</section>

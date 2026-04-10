@@ -1,0 +1,50 @@
+<div class="workspace-shell">
+  <nav class="container py-4">
+    <div class="surface-card surface-card-strong workspace-bar">
+      <div class="workspace-brand">
+        <a class="brand-mark" routerLink="/search">
+          <span class="brand-icon"><i class="bi bi-compass-fill"></i></span>
+          <span>
+            <span class="brand-title display-font">JobFlow</span>
+            <span class="brand-subtitle">Search desk, shortlist, and account-backed API access</span>
+          </span>
+        </a>
+      </div>
+
+      <div class="workspace-nav">
+        <a
+          class="nav-pill"
+          routerLink="/search"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Search
+        </a>
+        <a class="nav-pill" routerLink="/saved" routerLinkActive="active">
+          Saved <span class="pill-count">{{ savedCount() }}</span>
+        </a>
+        <a class="nav-pill" routerLink="/activity" routerLinkActive="active">
+          Activity <span class="pill-count">{{ searchCount() }}</span>
+        </a>
+      </div>
+
+      <div class="workspace-user">
+        <div class="user-chip">
+          <span class="user-icon"><i class="bi bi-person-badge"></i></span>
+          <span>
+            <strong>{{ auth.displayName() }}</strong>
+            <small>{{ auth.session()?.email }} • {{ auth.session()?.keyPreview }}</small>
+          </span>
+        </div>
+
+        <button class="btn outline-brand-btn rounded-pill px-3" type="button" (click)="logout()">
+          Sign out
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <router-outlet></router-outlet>
+  </main>
+</div>

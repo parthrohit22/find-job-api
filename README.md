@@ -10,12 +10,16 @@ This project focuses on backend engineering practices, modular architecture, and
 ## Features
 
 - REST API built with Flask
+- Angular frontend workspace with Bootstrap styling
 - Multi-provider job sourcing
-- API key authentication
+- SQLite-backed user accounts with generated API keys
 - Request rate limiting
 - In-memory caching
 - Consistent job data normalization
 - Country-based engine selection
+- Frontend routing with protected pages
+- Browser-persisted saved jobs, notes, and search history
+- Location, distance, work-mode, and internship filters
 - Interactive Swagger documentation
 - Modular backend architecture
 
@@ -23,7 +27,7 @@ This project focuses on backend engineering practices, modular architecture, and
 
 The API follows a layered backend architecture where HTTP requests flow through the API layer, into service logic, and then to external job provider engines.
 ```
-Client
+Angular Client
    |
    v
 Flask API (routes)
@@ -47,8 +51,10 @@ find-job-api/
 ├── app.py
 ├── config.py
 ├── requirements.txt
+├── frontend/
 │
 ├── routes/
+│   ├── auth.py
 │   ├── health.py
 │   └── jobs.py
 │
@@ -94,10 +100,9 @@ rate limiting, and job data normalization.
 
 ## API Endpoint
 
-### GET /jobs
+### GET /api/jobs
 
 Search for jobs using keywords and optional filters.
-
 
 ### Required Header
 
@@ -109,21 +114,23 @@ query
 
 Example:
 
-/jobs?query=developer
+/api/jobs?query=developer
 
 ### Optional Query Parameters
 ```
 | Parameter | Description | Default |
 |----------|-------------|--------|
 | country | ISO-2 country code | us |
+| location | City or region keyword | |
+| distance | Radius in kilometers | |
 | page | Page number | 1 |
-| remote | true or false | false |
-| type | FULLTIME or CONTRACT | |
+| work_mode | remote, hybrid, onsite | |
+| type | FULLTIME, PARTTIME, CONTRACT, INTERNSHIP | |
 ```
 
 ## Example Request
 
-GET /jobs?query=developer&country=us&remote=true
+GET /api/jobs?query=developer&country=us&location=Austin&distance=20&work_mode=remote&type=FULLTIME
 X-API-Key: your-api-key
 
 ## Example Response
@@ -138,6 +145,8 @@ X-API-Key: your-api-key
 “title”: “Backend Software Developer”,
 “company”: “Aperio Global”,
 “location”: “Washington”,
+"work_mode": "remote",
+"distance_km": 8,
 “employment_type”: “Full-time”,
 “remote”: false,
 “apply_link”: “https://www.example.com/apply”,
@@ -164,7 +173,7 @@ Swagger provides interactive API documentation and testing.
 
 Local:
 ```
-http://127.0.0.1:5000/apidocs
+http://127.0.0.1:5001/apidocs
 ```
 Production:
 ```
@@ -186,10 +195,48 @@ Install dependencies
 ```
 pip install -r requirements.txt
 ```
+
+Create the Angular app dependencies
+```
+cd frontend
+npm install
+cd ..
+```
+
+Use an LTS Node.js release for Angular work. Angular CLI 21 warns that Node `v25.x` is
+unsupported and may cause local builds to fail unexpectedly.
+
+During local development, if a live job provider is unavailable, the backend falls back to bundled
+sample job data so the frontend can still be exercised end to end.
+
+Create an account in the Angular UI before searching. The backend stores users in `data/jobsearch.sqlite3`
+and issues a fresh API key on signup or login.
+
 Run application
 ```
 python app.py or python3 app.py
 ```
+
+Run the Angular frontend in development
+```
+cd frontend
+npm start
+```
+
+The Flask API runs on `http://127.0.0.1:5001`.
+
+The Angular dev server runs on `http://localhost:4200` and proxies `/api/*` requests to the Flask
+API on port `5001`.
+
+Build the frontend for Flask hosting
+```
+cd frontend
+npm run build
+cd ..
+python app.py
+```
+
+After the build, Flask serves the Angular app at `http://127.0.0.1:5001/`.
 ## Environment Variables
 
 Create a `.env` file in the project root.
@@ -212,6 +259,9 @@ gunicorn app:app
 ## Security Notes
 
 - API keys required for all requests
+- Frontend account creation uses `/api/auth/register`
+- Frontend sign-in uses `/api/auth/login`
+- Passwords and session API keys are stored as salted SHA-256 hashes
 - Rate limiting applied per client IP
 - Secrets stored using environment variables
 - `.env` files excluded from Git
@@ -220,4 +270,3 @@ gunicorn app:app
 
 ## Author
 Parth Rohit
-

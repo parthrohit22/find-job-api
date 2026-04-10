@@ -1,4 +1,15 @@
 def normalize_job(job: dict) -> dict:
+    def detect_work_mode(*values: str | None, remote: bool = False) -> str:
+        if remote:
+            return "remote"
+
+        searchable_text = " ".join(value or "" for value in values).lower()
+        if "hybrid" in searchable_text:
+            return "hybrid"
+        if any(marker in searchable_text for marker in {"onsite", "on-site", "in-office"}):
+            return "onsite"
+
+        return "onsite"
 
     def detect_source(link: str | None) -> str | None:
         if not link:
@@ -29,6 +40,13 @@ def normalize_job(job: dict) -> dict:
             "company": job.get("employer_name"),
             "location": job.get("job_city") or job.get("job_country"),
             "remote": job.get("job_is_remote", False),
+            "work_mode": detect_work_mode(
+                job.get("job_title"),
+                job.get("job_description"),
+                job.get("job_city"),
+                remote=job.get("job_is_remote", False),
+            ),
+            "distance_km": job.get("job_distance_km"),
             "employment_type": job.get("job_employment_type"),
             "apply_link": apply_link,
             "apply_source": detect_source(apply_link),
@@ -44,6 +62,12 @@ def normalize_job(job: dict) -> dict:
         "company": job.get("company", {}).get("display_name"),
         "location": job.get("location", {}).get("display_name"),
         "remote": False,
+        "work_mode": detect_work_mode(
+            job.get("title"),
+            job.get("description"),
+            job.get("location", {}).get("display_name"),
+        ),
+        "distance_km": job.get("distance"),
         "employment_type": job.get("contract_time"),
         "apply_link": apply_link,
         "apply_source": detect_source(apply_link) if apply_link else "Adzuna",

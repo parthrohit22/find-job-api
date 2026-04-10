@@ -1,13 +1,22 @@
 # Virtual environment
 venv/
 
-# Environment variables (secrets)
+# Environment variables
 .env
+.env.*
 
-# Python cache
+# Python cache & artifacts
 __pycache__/
 *.pyc
+build/
+dist/
+*.egg-info/
+
+# Database
 data/*.sqlite3
+
+# Logs
+*.log
 
 # OS junk
 .DS_Store
@@ -15,3 +24,8 @@ data/*.sqlite3
 # Frontend artifacts
 frontend/node_modules/
 frontend/dist/
+frontend/.angular/
+
+# Editor files
+.vscode/
+frontend/.vscode/

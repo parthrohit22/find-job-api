@@ -1,0 +1,107 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Find Job API architecture</title>
+  <desc id="desc">Visual architecture diagram showing the Angular frontend, browser storage, Flask routes, SQLite user store, engine factory, and job providers.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F3EBDD"/>
+      <stop offset="1" stop-color="#DCE5EA"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#0F766E"/>
+      <stop offset="1" stop-color="#163042"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#15222D" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="760" rx="36" fill="url(#bg)"/>
+  <circle cx="144" cy="112" r="154" fill="#D97706" fill-opacity="0.14"/>
+  <circle cx="1036" cy="122" r="126" fill="#0F766E" fill-opacity="0.10"/>
+  <circle cx="1050" cy="646" r="180" fill="#163042" fill-opacity="0.06"/>
+
+  <text x="72" y="82" fill="#163042" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700">Find Job API Architecture</text>
+  <text x="72" y="112" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="16">Frontend workflow, backend orchestration, and provider routing in one view</text>
+
+  <g filter="url(#shadow)">
+    <rect x="72" y="156" width="312" height="232" rx="30" fill="#FFFDF9" fill-opacity="0.92" stroke="#FFFFFF"/>
+    <rect x="104" y="192" width="124" height="34" rx="17" fill="#163042" fill-opacity="0.08"/>
+    <text x="130" y="214" fill="#163042" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700">ANGULAR SPA</text>
+    <text x="104" y="264" fill="#111D27" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="700">Search, save,</text>
+    <text x="104" y="300" fill="#111D27" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="700">track, and apply.</text>
+    <text x="104" y="340" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="15">Login, search, saved roles, activity,</text>
+    <text x="104" y="362" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="15">role detail pages, and API-key injection.</text>
+
+    <rect x="72" y="426" width="312" height="176" rx="30" fill="#FFFDF9" fill-opacity="0.92" stroke="#FFFFFF"/>
+    <rect x="104" y="462" width="166" height="34" rx="17" fill="#0F766E" fill-opacity="0.11"/>
+    <text x="126" y="484" fill="#0F766E" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700">BROWSER STORAGE</text>
+    <text x="104" y="532" fill="#111D27" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700">Session, notes,</text>
+    <text x="104" y="568" fill="#111D27" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700">saved jobs, history.</text>
+
+    <rect x="448" y="124" width="308" height="124" rx="30" fill="url(#brand)"/>
+    <text x="484" y="174" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">FLASK APPLICATION</text>
+    <text x="484" y="212" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="700">Unified job search API</text>
+
+    <rect x="448" y="284" width="308" height="140" rx="30" fill="#FFFDF9" fill-opacity="0.94" stroke="#FFFFFF"/>
+    <text x="480" y="326" fill="#111D27" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="700">Routes and request handling</text>
+    <text x="480" y="356" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="14">/api/auth/register</text>
+    <text x="480" y="378" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="14">/api/auth/login</text>
+    <text x="480" y="400" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="14">/api/jobs + rate limit + validation</text>
+
+    <rect x="448" y="456" width="308" height="146" rx="30" fill="#FFFDF9" fill-opacity="0.94" stroke="#FFFFFF"/>
+    <text x="480" y="500" fill="#111D27" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="700">Service layer</text>
+    <text x="480" y="530" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="14">User store in SQLite</text>
+    <text x="480" y="552" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="14">API-key validation and rotation</text>
+    <text x="480" y="574" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="14">Country-based engine selection</text>
+
+    <rect x="812" y="164" width="316" height="158" rx="30" fill="#FFFDF9" fill-opacity="0.94" stroke="#FFFFFF"/>
+    <text x="846" y="208" fill="#111D27" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="700">SQLite user store</text>
+    <text x="846" y="238" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="14">Users, salts, password hashes, API-key hashes,</text>
+    <text x="846" y="260" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="14">key preview metadata, login timestamps.</text>
+    <rect x="846" y="274" width="116" height="30" rx="15" fill="#163042" fill-opacity="0.08"/>
+    <text x="872" y="294" fill="#163042" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700">data/jobsearch.sqlite3</text>
+
+    <rect x="812" y="358" width="148" height="164" rx="28" fill="#FFFDF9" fill-opacity="0.94" stroke="#FFFFFF"/>
+    <text x="842" y="402" fill="#111D27" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">JSearch</text>
+    <text x="842" y="430" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="14">Default engine for</text>
+    <text x="842" y="452" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="14">US and most</text>
+    <text x="842" y="474" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="14">non-UK searches.</text>
+    <rect x="842" y="488" width="82" height="28" rx="14" fill="#0F766E" fill-opacity="0.12"/>
+    <text x="862" y="507" fill="#0F766E" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700">RapidAPI</text>
+
+    <rect x="980" y="358" width="148" height="164" rx="28" fill="#FFFDF9" fill-opacity="0.94" stroke="#FFFFFF"/>
+    <text x="1010" y="402" fill="#111D27" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Adzuna</text>
+    <text x="1010" y="430" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="14">UK and GB</text>
+    <text x="1010" y="452" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="14">provider path with</text>
+    <text x="1010" y="474" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="14">query mapping.</text>
+    <rect x="1010" y="488" width="76" height="28" rx="14" fill="#D97706" fill-opacity="0.16"/>
+    <text x="1030" y="507" fill="#9A6700" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700">UK / GB</text>
+
+    <rect x="812" y="560" width="316" height="94" rx="28" fill="#FFFDF9" fill-opacity="0.94" stroke="#FFFFFF"/>
+    <text x="846" y="600" fill="#111D27" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="700">Normalized response</text>
+    <text x="846" y="628" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="14">Common job schema returned to the frontend, with fallback support.</text>
+  </g>
+
+  <g stroke="#163042" stroke-opacity="0.35" stroke-width="4" stroke-linecap="round">
+    <path d="M384 274H428"/>
+    <path d="M384 514H428"/>
+    <path d="M756 186H796"/>
+    <path d="M756 526H796"/>
+    <path d="M756 526H964V560"/>
+    <path d="M886 522V560"/>
+    <path d="M1054 522V560"/>
+    <path d="M602 248V284"/>
+    <path d="M602 424V456"/>
+  </g>
+  <g fill="#163042" fill-opacity="0.55">
+    <path d="M420 268L438 274L420 280V268Z"/>
+    <path d="M420 508L438 514L420 520V508Z"/>
+    <path d="M788 180L806 186L788 192V180Z"/>
+    <path d="M788 520L806 526L788 532V520Z"/>
+    <path d="M958 552L964 570L970 552H958Z"/>
+    <path d="M880 552L886 570L892 552H880Z"/>
+    <path d="M1048 552L1054 570L1060 552H1048Z"/>
+    <path d="M596 276L602 294L608 276H596Z"/>
+    <path d="M596 448L602 466L608 448H596Z"/>
+  </g>
+</svg>

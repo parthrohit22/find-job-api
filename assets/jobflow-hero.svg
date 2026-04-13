@@ -1,0 +1,69 @@
+<svg width="1200" height="460" viewBox="0 0 1200 460" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Find Job API hero banner</title>
+  <desc id="desc">Hero banner for the Find Job API README showing the JobFlow brand, job search product positioning, and a stylized workspace snapshot.</desc>
+  <defs>
+    <linearGradient id="bg" x1="76" y1="44" x2="1138" y2="416" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F3EBDD"/>
+      <stop offset="1" stop-color="#D9E3EA"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#0F766E"/>
+      <stop offset="1" stop-color="#163042"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#15222D" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="460" rx="32" fill="url(#bg)"/>
+  <circle cx="120" cy="92" r="128" fill="#D97706" fill-opacity="0.18"/>
+  <circle cx="1070" cy="84" r="104" fill="#0F766E" fill-opacity="0.10"/>
+  <circle cx="1110" cy="382" r="140" fill="#163042" fill-opacity="0.07"/>
+
+  <rect x="74" y="66" width="126" height="32" rx="16" fill="#163042" fill-opacity="0.08"/>
+  <text x="98" y="87" fill="#163042" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700">JOBFLOW PLATFORM</text>
+
+  <text x="74" y="164" fill="#111D27" font-family="Arial, Helvetica, sans-serif" font-size="50" font-weight="700">Find roles through one</text>
+  <text x="74" y="220" fill="#111D27" font-family="Arial, Helvetica, sans-serif" font-size="50" font-weight="700">clean product surface.</text>
+  <text x="74" y="268" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="18">Unified provider search, account-backed access, saved jobs, notes,</text>
+  <text x="74" y="294" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="18">and activity tracking across a polished Angular plus Flask stack.</text>
+
+  <rect x="74" y="332" width="154" height="38" rx="19" fill="url(#brand)"/>
+  <text x="117" y="356" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">Flask + Angular</text>
+  <rect x="240" y="332" width="138" height="38" rx="19" fill="#FFFFFF" stroke="#D6DCE1"/>
+  <text x="275" y="356" fill="#163042" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">API key auth</text>
+  <rect x="390" y="332" width="152" height="38" rx="19" fill="#FFFFFF" stroke="#D6DCE1"/>
+  <text x="424" y="356" fill="#163042" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">Saved roles + notes</text>
+
+  <g filter="url(#shadow)">
+    <rect x="662" y="56" width="466" height="348" rx="30" fill="#FFFDF9" fill-opacity="0.92" stroke="#FFFFFF"/>
+    <rect x="686" y="82" width="418" height="64" rx="22" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <rect x="708" y="96" width="38" height="38" rx="12" fill="url(#brand)"/>
+    <text x="758" y="118" fill="#111D27" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700">JobFlow</text>
+    <text x="758" y="136" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="12">Search desk, shortlist, and account-backed API access</text>
+    <rect x="972" y="98" width="56" height="32" rx="16" fill="#0F766E" fill-opacity="0.10"/>
+    <text x="986" y="119" fill="#0F766E" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700">Search</text>
+
+    <rect x="686" y="164" width="418" height="86" rx="24" fill="#FFF9F1" stroke="#F3E6D0"/>
+    <text x="714" y="201" fill="#111D27" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700">Search control center</text>
+    <text x="714" y="227" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="14">Place, distance, job type, and work style filters in one workflow.</text>
+    <rect x="1002" y="184" width="76" height="48" rx="16" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <text x="1023" y="202" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="11">Saved</text>
+    <text x="1025" y="223" fill="#111D27" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700">12</text>
+
+    <rect x="686" y="270" width="154" height="104" rx="22" fill="#FFFCF8" stroke="#E5E7EB"/>
+    <text x="710" y="299" fill="#111D27" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Filters</text>
+    <rect x="710" y="314" width="106" height="18" rx="9" fill="#163042" fill-opacity="0.06"/>
+    <rect x="710" y="340" width="106" height="18" rx="9" fill="#163042" fill-opacity="0.06"/>
+    <text x="720" y="327" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="10">Remote · Austin · Full-time</text>
+    <text x="720" y="353" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="10">Distance and country routing</text>
+
+    <rect x="856" y="270" width="248" height="104" rx="22" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <rect x="878" y="290" width="64" height="24" rx="12" fill="#0F766E" fill-opacity="0.12"/>
+    <rect x="950" y="290" width="64" height="24" rx="12" fill="#163042" fill-opacity="0.08"/>
+    <text x="897" y="306" fill="#0F766E" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700">Remote</text>
+    <text x="970" y="306" fill="#163042" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700">Full-time</text>
+    <text x="878" y="338" fill="#111D27" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="700">Backend Software Developer</text>
+    <text x="878" y="360" fill="#5B6976" font-family="Arial, Helvetica, sans-serif" font-size="13">Aperio Global · Washington</text>
+  </g>
+</svg>

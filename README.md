@@ -1,153 +1,227 @@
 # Find Job API
 
-A production-style job search platform built with **Flask** and an **Angular frontend**.  
-It aggregates job listings from multiple providers and exposes them through a unified, normalized interface.
+![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?style=flat-square&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Backend-Flask-000000?style=flat-square&logo=flask&logoColor=white)
+![Angular](https://img.shields.io/badge/Frontend-Angular-DD0031?style=flat-square&logo=angular&logoColor=white)
+![SQLite](https://img.shields.io/badge/Auth%20Store-SQLite-003B57?style=flat-square&logo=sqlite&logoColor=white)
 
-The backend applies authentication, rate limiting, provider selection, and fallback handling, while the frontend provides search, saved jobs, notes, and activity views.
+Production-style full-stack job search app built with Flask and Angular.
 
-## Features
+It combines multiple provider APIs behind one normalized backend contract, then layers on account creation, API-key auth, protected frontend routes, saved jobs, personal notes, and search activity tracking.
 
-- Flask REST API
-- Angular frontend with Bootstrap styling
-- Multi-provider job sourcing
-- Country-based engine selection
-- SQLite-backed user accounts with generated API keys
-- API key authentication for protected endpoints
-- Request rate limiting
-- In-memory caching
-- Consistent job data normalization
-- Location, distance, work-mode, and internship filters
-- Frontend routing with protected pages
-- Browser-persisted saved jobs, notes, and search history
-- Interactive Swagger documentation
-- Modular backend architecture
+## Why This Repo Exists
 
+Job APIs rarely agree on request shapes, field names, auth requirements, or filtering behavior. This project smooths that out with a single `/api/jobs` interface and a frontend that feels like one product instead of a collection of provider integrations.
 
-## System Architecture
+## Highlights
 
-Requests flow from the Angular client into the Flask API, then through service logic and provider-specific engines.
+- Unified job search API across multiple providers
+- Country-based engine routing with normalized job payloads
+- Account registration and login with SQLite-backed user records
+- Rotating API keys stored as salted hashes, not plain text
+- Protected Angular routes for search, saved roles, activity, and job detail views
+- Browser-persisted saved jobs, notes, and recent search history
+- Swagger UI for interactive API testing
+- Runtime fallback to sample jobs when live provider calls fail
+- Production-style deployment path where Flask can serve the built Angular app
+
+## Supported Provider Flow
+
+- `us` and most non-UK countries: RapidAPI JSearch
+- `uk` / `gb`: Adzuna
+- Response shape returned to clients: normalized into one consistent schema
+
+> Runtime fallback is available when a provider request fails, but the backend still requires valid RapidAPI configuration at startup because the JSearch engine is imported during app boot.
+
+## Architecture
 
 ```text
-Angular Client
-   |
-   v
-Flask API (routes)
-   |
-   v
+Angular SPA
+  |- Login / Register
+  |- Search / Saved / Activity / Role Detail
+  |- localStorage for session, notes, and search history
+  v
+Flask API
+  |- /api/auth/register
+  |- /api/auth/login
+  |- /api/jobs
+  |- /api/health
+  |- /apidocs
+  v
 Service Layer
-   |
-   v
-Job Engines
-   |        |
-   v        v
-JSearch   Adzuna
+  |- engine_factory.py
+  |- user_store.py
+  v
+Provider Engines
+  |- JSearch
+  |- Adzuna
 ```
 
-Project Structure
+## Tech Stack
+
+| Layer | Tools | Responsibility |
+| --- | --- | --- |
+| Backend | Flask, Requests, Flasgger | REST API, provider orchestration, docs |
+| Frontend | Angular 21, RxJS | Auth flow, search UX, saved-job workflows |
+| Persistence | SQLite, browser `localStorage` | User accounts, session state, notes, history |
+| Auth | API keys, salted SHA-256 hashes | Protected access to job search endpoints |
+| Docs | Swagger UI | Interactive exploration of the API |
+
+## Local Development
+
+### Prerequisites
+
+- Python 3.11 or newer recommended
+- Node.js LTS recommended
+- npm
+
+Angular CLI 21 works best on an LTS Node release. Avoid Node 25 for local Angular development.
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/parthrohit22/find-job-api.git
+cd find-job-api
 ```
-find-job-api/
-│
-├── app.py
-├── config.py
-├── requirements.txt
-├── frontend/
-│
-├── routes/
-│   ├── auth.py
-│   ├── health.py
-│   └── jobs.py
-│
-├── services/
-│   ├── engine_factory.py
-│   ├── user_store.py
-│   └── engines/
-│       ├── base.py
-│       ├── jsearch.py
-│       └── adzuna.py
-│
-├── utils/
-│   ├── auth.py
-│   ├── cache.py
-│   ├── rate_limiter.py
-│   ├── normalizer.py
-│   └── sample_jobs.py
-│
-├── data/
-└── README.md
-````
 
-Layer responsibilities
+### 2. Set Up the Backend
 
-routes/
-Handles HTTP requests and API endpoints.
+```bash
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
 
-services/
-Handles provider integrations, engine selection, and user storage.
+### 3. Set Up the Frontend
 
-utils/
-Contains reusable utilities such as authentication, caching, rate limiting, normalization, and development sample data.
+```bash
+cd frontend
+npm install
+cd ..
+```
 
+### 4. Configure Environment Variables
 
-Technologies Used
-	•	Python 3
-	•	Flask
-	•	Angular
-	•	Bootstrap
-	•	Flasgger (Swagger / OpenAPI)
-	•	RapidAPI JSearch
-	•	Adzuna Jobs API
-	•	Requests
-	•	SQLite
-	•	Gunicorn
-	•	Git & GitHub
-	•	Postman
+Create a root `.env` file:
 
+```env
+RAPIDAPI_KEY=your_rapidapi_key
+RAPIDAPI_HOST=jsearch.p.rapidapi.com
+ADZUNA_APP_ID=your_adzuna_app_id
+ADZUNA_APP_KEY=your_adzuna_app_key
+APP_PORT=5001
+USER_DB_PATH=data/jobsearch.sqlite3
+```
 
-Authentication
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `RAPIDAPI_KEY` | Yes | Required for backend startup and JSearch requests |
+| `RAPIDAPI_HOST` | Yes | RapidAPI host, typically `jsearch.p.rapidapi.com` |
+| `ADZUNA_APP_ID` | Only for live UK/GB searches | Adzuna application ID |
+| `ADZUNA_APP_KEY` | Only for live UK/GB searches | Adzuna application key |
+| `APP_PORT` | No | Flask port, defaults to `5001` |
+| `USER_DB_PATH` | No | SQLite database path, defaults to `data/jobsearch.sqlite3` |
 
-The frontend supports account registration and login through:
-	•	POST /api/auth/register
-	•	POST /api/auth/login
+Never commit `.env` files or real credentials.
 
-Authenticated users receive an API key, which must be sent in the X-API-Key header when calling protected job search endpoints.
+### 5. Start the App in Development Mode
 
-Legacy API keys are also supported for compatibility.
+Run the backend in one terminal:
 
+```bash
+source venv/bin/activate
+python app.py
+```
 
-API Endpoints
+Run the Angular frontend in another terminal:
 
-GET /api/jobs
+```bash
+cd frontend
+npm start
+```
 
-Search for jobs using keywords and optional filters.
+Open:
 
-Required header
+- Frontend: `http://localhost:4200`
+- Backend API: `http://127.0.0.1:5001`
+- Swagger UI: `http://127.0.0.1:5001/apidocs`
+
+The Angular dev server proxies `/api` requests to Flask through [`frontend/proxy.conf.json`](frontend/proxy.conf.json).
+
+## Production-Style Local Run
+
+Build the Angular app:
+
+```bash
+cd frontend
+npm run build
+cd ..
+```
+
+Then start Flask:
+
+```bash
+source venv/bin/activate
+python app.py
+```
+
+If the frontend build exists, Flask serves the compiled SPA from `frontend/dist/frontend/browser`.
+
+## API Overview
+
+### Auth Endpoints
+
+| Method | Route | Description |
+| --- | --- | --- |
+| `POST` | `/api/auth/register` | Create a user and issue an API key |
+| `POST` | `/api/auth/login` | Authenticate a user and rotate the API key |
+
+### Core Endpoints
+
+| Method | Route | Description |
+| --- | --- | --- |
+| `GET` | `/api/jobs` | Search jobs with normalized results |
+| `GET` | `/api/health` | Basic health check |
+| `GET` | `/apidocs` | Swagger UI |
+
+### `GET /api/jobs`
+
+Required header:
+
+```http
 X-API-Key: your-api-key
-
-Required query parameter
-query
-
-Optional query parameters
-	•	country — ISO-2 country code (default: us)
-	•	location — city or region keyword
-	•	distance — radius in kilometers
-	•	page — page number (default: 1)
-	•	work_mode — remote, hybrid, or onsite
-	•	type — FULLTIME, PARTTIME, CONTRACT, or INTERNSHIP
-
-Example request
-
-GET /api/jobs?query=developer&country=us&location=Austin&distance=20&work_mode=remote&type=FULLTIME
-X-API-Key: your-api-key
-
-Example response
 ```
+
+Required query parameter:
+
+- `query`
+
+Optional query parameters:
+
+- `country` default `us`
+- `location`
+- `distance`
+- `page` default `1`
+- `work_mode` one of `remote`, `hybrid`, `onsite`
+- `type` such as `FULLTIME`, `PARTTIME`, `CONTRACT`, `INTERNSHIP`
+
+Example:
+
+```bash
+curl "http://127.0.0.1:5001/api/jobs?query=backend%20engineer&country=us&location=Austin&work_mode=remote&type=FULLTIME" \
+  -H "X-API-Key: your-api-key"
+```
+
+Example response:
+
+```json
 {
   "cached": false,
-  "query": "developer",
+  "query": "backend engineer",
   "country": "us",
   "filters": {
     "location": "Austin",
-    "distance": 20,
+    "distance": null,
     "work_mode": "remote",
     "type": "FULLTIME"
   },
@@ -159,9 +233,9 @@ Example response
       "title": "Backend Software Developer",
       "company": "Aperio Global",
       "location": "Washington",
+      "remote": false,
       "work_mode": "remote",
       "employment_type": "Full-time",
-      "remote": false,
       "apply_link": "https://www.example.com/apply",
       "apply_source": "Company Site",
       "apply_type": "direct"
@@ -172,122 +246,61 @@ Example response
 }
 ```
 
-Job Data Sources
-	•	US — RapidAPI (JSearch)
-	•	UK — Adzuna Jobs API
+## Frontend Experience
 
-The backend selects the provider based on the country parameter while returning a consistent normalized schema.
+The Angular app includes:
 
+- Registration and sign-in flows
+- Search form with country, location, distance, work mode, and type filters
+- Saved jobs with inline personal notes
+- Recent-search activity tracking with one-click rerun
+- Role detail page backed by the latest API response or saved-job storage
+- Protected routes that redirect unauthenticated users to the login screen
 
-Swagger Documentation
+## Project Structure
 
-Swagger provides interactive API documentation and testing.
+```text
+find-job-api/
+├── app.py
+├── config.py
+├── requirements.txt
+├── routes/
+│   ├── auth.py
+│   ├── health.py
+│   └── jobs.py
+├── services/
+│   ├── engine_factory.py
+│   ├── user_store.py
+│   └── engines/
+│       ├── base.py
+│       ├── adzuna.py
+│       └── jsearch.py
+├── utils/
+│   ├── auth.py
+│   ├── cache.py
+│   ├── normalizer.py
+│   ├── rate_limiter.py
+│   └── sample_jobs.py
+├── data/
+└── frontend/
+    └── src/
+```
 
-Local
-http://127.0.0.1:5001/apidocs
+## Implementation Notes
 
-Production
-https://your-deployment-url/apidocs
+- User records live in SQLite, while saved jobs, notes, and search history live in browser storage.
+- API keys are rotated on login and only stored server-side as salted hashes with a searchable prefix.
+- Rate limiting is applied per IP address and currently defaults to `20` requests per `60` seconds.
+- The job response includes a `source` field so the client can distinguish live provider data from `sample_fallback`.
+- Legacy API-key login remains supported for compatibility.
 
+## Good Next Improvements
 
-Frontend Notes
-	•	Create an account in the Angular UI before searching
-	•	User records are stored locally in data/jobsearch.sqlite3
-	•	Saved jobs, notes, and search history are persisted in the browser
-	•	Protected frontend pages require login
+- Add automated backend and frontend test coverage around auth, search filters, and fallback behavior
+- Wire the existing cache utility into provider fetches and expose real cache metadata in responses
+- Add Docker and a documented Gunicorn deployment recipe for easier deployment
+- Expand provider routing beyond JSearch and Adzuna
 
+## License
 
-Local Setup
-
-1. Clone the repository
-
-git clone https://github.com/parthrohit22/find-job-api.git
-cd find-job-api
-
-2. Create a virtual environment
-
-python -m venv venv
-source venv/bin/activate
-
-3. Install backend dependencies
-
-pip install -r requirements.txt
-
-4. Install frontend dependencies
-
-cd frontend
-npm install
-cd ..
-
-Use an LTS Node.js release for Angular development. Angular CLI 21 may warn that Node v25.x is unsupported.
-
-5. Configure environment variables
-
-Create a .env file in the project root:
-
-RAPIDAPI_KEY=your_key
-RAPIDAPI_HOST=jsearch.p.rapidapi.com
-ADZUNA_APP_ID=your_id
-ADZUNA_APP_KEY=your_key
-
-These credentials must never be committed to GitHub.
-
-6. Run the backend
-
-python app.py
-
-The Flask API runs on:
-http://127.0.0.1:5001
-
-7. Run the Angular frontend in development
-
-cd frontend
-npm start
-
-The Angular dev server runs on:
-http://localhost:4200
-
-During development, /api/* requests are proxied to the Flask backend on port 5001.
-
-
-Frontend Build for Flask Hosting
-
-To build the frontend and let Flask serve it:
-
-cd frontend
-npm run build
-cd ..
-python app.py
-
-After the build, Flask serves the Angular app at:
-
-http://127.0.0.1:5001/
-
-
-Development Notes
-	•	If a live provider is unavailable during development, the backend can fall back to local sample job data so the frontend remains usable
-	•	Sample fallback is intended for development convenience
-	•	Legacy API keys remain supported for compatibility
-
-
-Deployment
-
-The backend is designed to run behind Gunicorn.
-
-gunicorn app:app
-
-
-Security Notes
-	•	API keys are required for protected job search requests
-	•	Frontend account creation uses /api/auth/register
-	•	Frontend sign-in uses /api/auth/login
-	•	Passwords and session API keys are stored as salted SHA-256 hashes
-	•	Rate limiting is applied per client IP
-	•	Secrets are stored using environment variables
-	•	.env files are excluded from Git
-	•	Third-party credentials are never stored in source code
-
-Author
-
-Parth Rohit
-
+No license file is currently included in this repository.
